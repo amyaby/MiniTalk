@@ -17,7 +17,8 @@ void ft_bitToAscii(int signal)
     static int bit = 0;
     static int charInBinary = 0;
     if(signal == SIGUSR1)
-        charInBinary |= (1 << bit);
+    // charInBinary |= (1 << bit);
+        charInBinary |= (1 << (7 - bit));
     bit++;
     if(bit == 7)
     {
