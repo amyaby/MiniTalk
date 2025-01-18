@@ -16,5 +16,6 @@
 #include <signal.h>
 #include <stdio.h>
 #include <unistd.h>
-
+#include "ft_printf/ft_printf.h"
+#include <sys/types.h>
 #endif

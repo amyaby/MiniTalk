@@ -52,28 +52,30 @@ void send_caracter(int pid, char c)
             kill(pid,SIGUSR1);
         else
             kill(pid,SIGUSR2);
-        usleep(500);
+        usleep(700);
         bit--;
     }
 }
+
 int main(int argc, char **argv)
 {
     if(argc != 3)
     {       
-         write(2,"must be like this: ./client [PID] [message]\n",43);
+         write(2,"must be like this🤭: ./client [PID] [message]\n",49);
         return (1);
     }
     int server_pid = ft_atoi(argv[1]);
     if(server_pid <= 0)
         {     
-            write(2,"server's pid is invalid\n",24);
+            write(2,"___😵‍💫server's pid is invalid\n😵‍💫___",42);
             return (1);
         } 
-    int i = 0;
+    size_t i = 0;
     char *message = argv[2];
     while(i<ft_strlen(message))
     {
         send_caracter(server_pid,message[i]);
+        usleep(700);
         i++;
     }
     send_caracter(server_pid,'\0');

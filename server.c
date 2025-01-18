@@ -12,33 +12,48 @@
 
 #include "minitalk.h"
 
-void ft_bitToAscii(int signal)
+void ft_bitToAscii(int signal,siginfo_t *info,void *context)
 {
     static int bit = 0;
     static int charInBinary = 0;
+    static pid_t client_pid = 0;
+    (void)context;
+    if(client_pid == 0)
+        client_pid = info->si_pid;
+    if(client_pid != info->si_pid)
+    {
+        client_pid = info->si_pid;
+        bit = 0;
+        charInBinary = 0;
+    }
     if(signal == SIGUSR1)
-    // charInBinary |= (1 << bit);
-        charInBinary |= (1 << (7 - bit));
+      charInBinary |= (1 << (7 - bit));
     bit++;
-    if(bit == 7)
+    if(bit == 8)
     {
         write(1,&charInBinary,1);
         bit = 0;
         charInBinary = 0;
     }
 }
+
 int main(int argc, char **argv)
 {
+
     (void)argv;
     if(argc != 1)
     {
-        printf("error: you must have only one argument argv[0]");
+        ft_printf("❌error: you must have only one argument argv[0]");
         return 1;
     }
     int pid = getpid();
-    printf("server's PID is : %d\n", pid);
-    signal(SIGUSR1, ft_bitToAscii);
-    signal(SIGUSR2, ft_bitToAscii);
+    ft_printf("server's PID is : %d\n", pid);
+    struct sigaction sasa;
+    sasa.sa_sigaction = ft_bitToAscii;
+    sasa.sa_flags = SA_SIGINFO;
+    sigaction(SIGUSR1,&sasa,NULL);
+    sigaction(SIGUSR2,&sasa,NULL);
+
     while(1)
     {
         pause();
